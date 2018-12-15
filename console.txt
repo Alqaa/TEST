@@ -1,0 +1,104 @@
+Started by user admin
+Obtained Jenkinsfile from git https://github.com/UST-SEIS665/seis665-03-fall-2018-assignment-11-Alqaa.git
+Running in Durability level: MAX_SURVIVABILITY
+[Pipeline] properties
+[Pipeline] node
+Running on df4369c26a84 in /workspace/docker-pipeline
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Setup)
+[Pipeline] git
+Cloning the remote Git repository
+Cloning repository https://github.com/UST-SEIS665/seis665-03-fall-2018-assignment-11-Alqaa.git
+ > git init /workspace/docker-pipeline # timeout=10
+Fetching upstream changes from https://github.com/UST-SEIS665/seis665-03-fall-2018-assignment-11-Alqaa.git
+ > git --version # timeout=10
+using GIT_ASKPASS to set credentials mygit
+ > git fetch --tags --progress https://github.com/UST-SEIS665/seis665-03-fall-2018-assignment-11-Alqaa.git +refs/heads/*:refs/remotes/origin/*
+ > git config remote.origin.url https://github.com/UST-SEIS665/seis665-03-fall-2018-assignment-11-Alqaa.git # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url https://github.com/UST-SEIS665/seis665-03-fall-2018-assignment-11-Alqaa.git # timeout=10
+Fetching upstream changes from https://github.com/UST-SEIS665/seis665-03-fall-2018-assignment-11-Alqaa.git
+using GIT_ASKPASS to set credentials mygit
+ > git fetch --tags --progress https://github.com/UST-SEIS665/seis665-03-fall-2018-assignment-11-Alqaa.git +refs/heads/*:refs/remotes/origin/*
+ > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
+ > git rev-parse refs/remotes/origin/origin/master^{commit} # timeout=10
+Checking out Revision f8a4188f7502960f4ac347f82732a5b3c4faea84 (refs/remotes/origin/master)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f f8a4188f7502960f4ac347f82732a5b3c4faea84
+ > git branch -a -v --no-abbrev # timeout=10
+ > git checkout -b master f8a4188f7502960f4ac347f82732a5b3c4faea84
+Commit message: "Update Jenkinsfile"
+First time build. Skipping changelog.
+[Pipeline] sh
+[docker-pipeline] Running shell script
++ aws s3 cp s3://opopo/classweb.html /workspace/docker-pipeline/index.html
+Completed 63 Bytes/63 Bytes (1.6 KiB/s) with 1 file(s) remaining
+download: s3://opopo/classweb.html to ./index.html              
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build)
+[Pipeline] sh
+[docker-pipeline] Running shell script
++ docker build -t classweb:1.0 .
+Sending build context to Docker daemon  99.33kB
+
+Step 1/4 : FROM nginx
+latest: Pulling from library/nginx
+a5a6f2f73cd8: Pulling fs layer
+1ba02017c4b2: Pulling fs layer
+33b176c904de: Pulling fs layer
+33b176c904de: Verifying Checksum
+33b176c904de: Download complete
+1ba02017c4b2: Verifying Checksum
+1ba02017c4b2: Download complete
+a5a6f2f73cd8: Verifying Checksum
+a5a6f2f73cd8: Download complete
+a5a6f2f73cd8: Pull complete
+1ba02017c4b2: Pull complete
+33b176c904de: Pull complete
+Digest: sha256:5d32f60db294b5deb55d078cd4feb410ad88e6fe77500c87d3970eca97f54dba
+Status: Downloaded newer image for nginx:latest
+ ---> 568c4670fa80
+Step 2/4 : LABEL maintainer="Reem alqa2599@stthomas.edu"
+ ---> Running in 0c9fa0d5c0cc
+Removing intermediate container 0c9fa0d5c0cc
+ ---> a953723bf57e
+Step 3/4 : EXPOSE 80
+ ---> Running in e05b1d01a1c9
+Removing intermediate container e05b1d01a1c9
+ ---> e2141c1a6d4f
+Step 4/4 : COPY ${WORKSPACE}/index.html /usr/share/nginx/html/
+ ---> 8ae24a900fc3
+Successfully built 8ae24a900fc3
+Successfully tagged classweb:1.0
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Test)
+[Pipeline] sh
+[docker-pipeline] Running shell script
++ docker run -d --name classweb1 -p 80:80 --env NGINX_PORT=80 classweb:1.0
+55cab5f50dac379619de38949919f6e77062fe226f59566e7d70c5a3def8ec7d
+[Pipeline] sh
+[docker-pipeline] Running shell script
++ curl -s 10.120.1.85
+<html>
+<body>
+  <h1>My class webserver</h1>
+</body>
+</html>[Pipeline] sh
+[docker-pipeline] Running shell script
++ docker stop classweb1
+classweb1
+[Pipeline] sh
+[docker-pipeline] Running shell script
++ docker rm --force classweb1
+classweb1
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
