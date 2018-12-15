@@ -1,6 +1,3 @@
-properties([pipelineTriggers([githubPush()])])
-
-
 node('linux') {
     stage('Setup') {
         git credentialsId: '2369930e-193f-4e18-9797-76bd3d34f56e', url: 'https://github.com/UST-SEIS665/seis665-03-fall-2018-assignment-11-Alqaa.git'
